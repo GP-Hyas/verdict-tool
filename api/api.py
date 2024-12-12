@@ -1,5 +1,5 @@
-from utils.helper import fetch_payload
 import requests
+from utils.helper import fetch_payload
 
 
 def fetch_verdicts(

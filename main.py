@@ -16,11 +16,11 @@ def main():
         print(f"Using file path: {filepath}")
 
     env_vars = fetch_env_vars()
-    key = env_vars.get("key")
-    client_id = env_vars.get("client_id")
+    key = env_vars["key"]
+    client_id = env_vars["client_id"]
 
     base_url = "https://api.hyas.com"
-    url = fetch_urls(base_url)
+    url = fetch_urls(base_url).verdict
     header = fetch_header(key)
 
     domains = fetch_file(filepath)
