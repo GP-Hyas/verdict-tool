@@ -54,20 +54,13 @@ def fetch_header(key: str) -> dict[str, str]:
     }
 
 
-def fetch_payload(clientId: str, domain: str) -> dict[str, any]:
-    if not clientId or not domain:
-        print("Error: Missing client ID or domain for the payload.")
-        sys.exit(1)
-    return {"clientId": clientId, "domain": domain}
-
-
 def fetch_filepath() -> str:
     readline.set_completer(complete_path)
     readline.parse_and_bind("tab: complete")
 
     retries = 3
     while retries > 0:
-        filepath = input("Enter the file path to your txt or csv: ").strip()
+        filepath = input("\nEnter the file path to your txt or csv: ").strip()
 
         path = Path(filepath).expanduser().resolve()
 
@@ -104,14 +97,16 @@ def fetch_file(filepath: str) -> list[str]:
 
 
 def fetch_report(data: dict[str, list]) -> None:
+    print("\nGenerating CSV report...")
     report_data = []
+    summary_counts = {"allow": 0, "block": 0, "none": 0}
+
     for item in data.get("answer", []):
-        report_data.append(
-            {
-                "Domain": item.get("domain"),
-                "Verdict": item.get("verdict"),
-            }
-        )
+        domain = item.get("domain")
+        verdict = item.get("verdict")
+        report_data.append({"Domain": domain, "Verdict": verdict})
+        if verdict in summary_counts:
+            summary_counts[verdict] += 1
 
     df = pd.DataFrame(report_data)
 
@@ -120,3 +115,8 @@ def fetch_report(data: dict[str, list]) -> None:
 
     df.to_csv(csv_filename, columns=["Domain", "Verdict"], index=False)
     print(f"CSV created successfully: {csv_filename}")
+
+    print("\nSummary:")
+    for verdict, count in summary_counts.items():
+        print(f"{verdict.capitalize()}: {count} domains")
+    print("\nHave a nice day!")

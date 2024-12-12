@@ -1,3 +1,4 @@
+import asyncio
 from api.api import fetch_verdicts
 from utils.helper import (
     fetch_filepath,
@@ -9,7 +10,7 @@ from utils.helper import (
 )
 
 
-def main():
+async def main():
     filepath = fetch_filepath()
 
     if filepath is not None:
@@ -25,10 +26,13 @@ def main():
 
     domains = fetch_file(filepath)
 
-    data = fetch_verdicts(url, client_id, header, domains)
+    print("\n...")
+    print("Starting verdict run...")
+    data = await fetch_verdicts(url, client_id, domains, header)
 
+    print("...")
     fetch_report(data)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
