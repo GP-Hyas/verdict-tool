@@ -131,6 +131,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+verdict-toolEnvironment/
 .env
 .venv
 env/
