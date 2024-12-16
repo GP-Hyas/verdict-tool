@@ -39,8 +39,11 @@ display_welcome() {
   **:        -#+            :**          -#+  :+++++**.      .=-         *#-   
   **:        -#+            :**.        -*+.        -**.     .+*+++++++++*+.   
   ..          ..             ..         ..           ..         .........  
+  
 
                 Welcome to the HYAS Verdict Tool Installer!
+
+
 EOF
 }
 
