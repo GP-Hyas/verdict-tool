@@ -6,7 +6,7 @@ The **Verdict Tool** is a command-line utility that reads a .txt or .csv file co
 
 ## Requirements
 
-• **Python:** 3.8 or higher
+• **Python:** 3.11 or higher
 • **Dependencies:** installed via the script
 
 ## Installation
