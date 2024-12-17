@@ -18,7 +18,7 @@ The tool comes with an **install script** to make setup simple and streamlined.
 1. **Make the script executable:**
 
    ```bash
-   chmod +x isntall.sh
+   chmod +x install.sh
    ```
 
 2. **Run the script:**
