@@ -59,14 +59,43 @@ echo -e "${RESET}"
 
 # Function to determine the correct Python command
 get_python_command() {
-    if command -v python3 &> /dev/null; then
-        echo "python3"
-    elif command -v python &> /dev/null; then
-        echo "python"
-    else
-        echo -e "${RED}Error: Python is not installed or not in PATH.${RESET}"
-        exit 1
-    fi
+    # Detect the OS type
+    case "$OSTYPE" in
+        msys*|cygwin*)
+            # For Windows (Git Bash or Cygwin)
+            if command -v python &> /dev/null; then
+                if python --version 2>&1 | grep -q "Python 3"; then
+                    echo "python"
+                else
+                    echo -e "${RED}Error: Python 3 is required but not found.${RESET}"
+                    exit 1
+                fi
+            else
+                echo -e "${RED}Error: Python is not installed or not in PATH.${RESET}"
+                exit 1
+            fi
+            ;;
+        linux*|darwin*)
+            # For Linux or macOS
+            if command -v python3 &> /dev/null; then
+                echo "python3"
+            elif command -v python &> /dev/null; then
+                if python --version 2>&1 | grep -q "Python 3"; then
+                    echo "python"
+                else
+                    echo -e "${RED}Error: Python 3 is required but not found.${RESET}"
+                    exit 1
+                fi
+            else
+                echo -e "${RED}Error: Python is not installed or not in PATH.${RESET}"
+                exit 1
+            fi
+            ;;
+        *)
+            echo -e "${RED}Unsupported OS: $OSTYPE${RESET}"
+            exit 1
+            ;;
+    esac
 }
 
 # Function to read user input and create the .env file
@@ -110,7 +139,7 @@ setup_virtual_environment() {
     else
         source verdict-toolEnvironment/bin/activate
     fi
-    
+
     echo -e "${GREEN}Virtual environment activated!${RESET}"
 }
 
