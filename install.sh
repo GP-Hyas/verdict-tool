@@ -57,6 +57,18 @@ EOF
 echo -e "${RESET}"
 }
 
+# Function to determine the correct Python command
+get_python_command() {
+    if command -v python3 &> /dev/null; then
+        echo "python3"
+    elif command -v python &> /dev/null; then
+        echo "python"
+    else
+        echo -e "${RED}Error: Python is not installed or not in PATH.${RESET}"
+        exit 1
+    fi
+}
+
 # Function to read user input and create the .env file
 create_env_file() {
     echo -e "${YELLOW}\nLet's set up your API credentials.${RESET}"
@@ -83,13 +95,22 @@ EOF
 # Function to create and activate a virtual environment
 setup_virtual_environment() {
     echo -e "${YELLOW}\nSetting up the Python virtual environment...${RESET}"
-    python3 -m venv verdict-toolEnvironment
+
+    PYTHON_CMD=$(get_python_command)
+    $PYTHON_CMD -m venv verdict-toolEnvironment
+
     if [ $? -ne 0 ]; then
         echo -e "${RED}Error: Failed to create virtual environment. Make sure Python 3 is installed.${RESET}"
         exit 1
     fi
 
-    source verdict-toolEnvironment/bin/activate
+    # Activate virtual environment (different for Windows Git Bash)
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+        source verdict-toolEnvironment/Scripts/activate
+    else
+        source verdict-toolEnvironment/bin/activate
+    fi
+    
     echo -e "${GREEN}Virtual environment activated!${RESET}"
 }
 
